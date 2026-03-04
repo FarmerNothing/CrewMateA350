@@ -1,11 +1,10 @@
 import { invoke } from "@tauri-apps/api/core"
 import { listen } from "@tauri-apps/api/event"
-import { Download, Trash2, Loader2 } from "lucide-react"
+import { Download, Trash2, Loader2, Mic, CheckCircle2 } from "lucide-react"
 import { useState, useEffect } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { Progress } from "@/components/ui/progress"
 
 interface VoskModelInfo {
   id: string
@@ -52,7 +51,6 @@ export function VoiceModelSettings() {
   useEffect(() => {
     loadModels()
 
-    // Listen for download progress
     const unlisten = listen<DownloadProgress>("vosk-model-download-progress", (event) => {
       setDownloadProgress((prev) => {
         const newMap = new Map(prev)
@@ -61,7 +59,6 @@ export function VoiceModelSettings() {
       })
     })
 
-    // Listen for download complete
     const unlistenComplete = listen<string>("vosk-model-download-complete", () => {
       loadModels()
       setDownloadProgress(new Map())
@@ -75,28 +72,20 @@ export function VoiceModelSettings() {
 
   const handleDownload = async (modelId: string) => {
     try {
-      // Update local state immediately
       setModels((prev) => prev.map((m) => (m.id === modelId ? { ...m, is_downloading: true } : m)))
-
       await invoke("download_vosk_model", { modelId })
     } catch (error) {
       console.error("Failed to download model:", error)
-      // Revert state on error
       loadModels()
     }
   }
 
   const handleDelete = async (modelId: string) => {
-    if (!confirm("Are you sure you want to delete this model?")) {
-      return
-    }
+    if (!confirm("Are you sure you want to delete this model?")) return
 
     try {
       await invoke("delete_vosk_model", { modelId })
-      // If we deleted the selected model, clear the selection
-      if (selectedModel === modelId) {
-        setSelectedModel("")
-      }
+      if (selectedModel === modelId) setSelectedModel("")
       await loadModels()
     } catch (error) {
       console.error("Failed to delete model:", error)
@@ -112,114 +101,130 @@ export function VoiceModelSettings() {
     }
   }
 
-  if (loading) {
-    return (
-      <div className="space-y-3">
-        <div className="flex items-center gap-2 text-sm text-slate-400">
-          <Loader2 className="h-3 w-3 animate-spin" />
-          <span>Loading models...</span>
-        </div>
-      </div>
-    )
-  }
-
   const downloadedModels = models.filter((m) => m.is_downloaded)
   const notDownloadedModels = models.filter((m) => !m.is_downloaded)
 
   return (
     <div className="space-y-3">
-      <div className="grid grid-cols-[120px_1fr] items-center gap-3">
-        <Label className="text-sm text-slate-300">Voice Model</Label>
-        <select
-          value={selectedModel}
-          onChange={(e) => handleSelectModel(e.target.value)}
-          disabled={downloadedModels.length === 0}
-          className="w-full h-9 bg-slate-900/50 border border-slate-600 text-white text-sm rounded-md px-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {downloadedModels.length === 0 ? (
-            <option value="">No models installed</option>
-          ) : (
-            <>
-              <option value="">Select a model</option>
-              {downloadedModels.map((model) => (
-                <option key={model.id} value={model.id}>
-                  {model.name} ({model.size_mb} MB)
-                </option>
-              ))}
-            </>
-          )}
-        </select>
+      <div className="flex items-center gap-2 pt-1">
+        <Mic className="h-3 w-3 text-cyan-400 shrink-0" />
+        <span className="text-[10px] font-mono text-cyan-400 uppercase tracking-widest">Voice Recognition</span>
+        <div className="flex-1 h-px bg-slate-700/60" />
       </div>
 
-      {notDownloadedModels.length > 0 && (
+      {loading ? (
+        <div className="grid grid-cols-[120px_1fr] items-center gap-3">
+          <Label className="text-sm text-slate-300">Installed</Label>
+          <div className="flex items-center gap-2 text-xs text-slate-500">
+            <Loader2 className="h-3 w-3 animate-spin" />
+            <span>Loading…</span>
+          </div>
+        </div>
+      ) : (
+        downloadedModels.length > 0 && (
+          <div className="grid grid-cols-[120px_1fr] items-start gap-3">
+            <Label className="text-sm text-slate-300 pt-1">Installed</Label>
+            <div className="space-y-1">
+              {downloadedModels.map((model) => {
+                const isActive = model.id === selectedModel
+                return (
+                  <div
+                    key={model.id}
+                    onClick={() => handleSelectModel(model.id)}
+                    className={`flex items-center justify-between rounded-md px-2 py-1.5 border transition-colors cursor-pointer ${
+                      isActive
+                        ? "border-cyan-700/60 bg-cyan-950/30"
+                        : "border-slate-700/40 bg-slate-900/30 hover:border-slate-600/60"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      {isActive ? (
+                        <CheckCircle2 className="h-3 w-3 text-cyan-400 shrink-0" />
+                      ) : (
+                        <div className="h-3 w-3 rounded-full border border-slate-600 shrink-0" />
+                      )}
+                      <span className={`text-xs truncate ${isActive ? "text-white" : "text-slate-300"}`}>
+                        {model.name}
+                      </span>
+                      <span className="text-[10px] font-mono text-slate-500 shrink-0">{model.size_mb} MB</span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleDelete(model.id)
+                      }}
+                      className="h-6 w-6 p-0 text-slate-600 hover:text-red-400 hover:bg-red-950/30 shrink-0"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        )
+      )}
+
+      {!loading && notDownloadedModels.length > 0 && (
         <div className="grid grid-cols-[120px_1fr] items-start gap-3">
-          <Label className="text-sm text-slate-300 pt-1">Download</Label>
-          <div className="space-y-2">
+          <Label className="text-sm text-slate-300 pt-1">Available</Label>
+          <div className="space-y-1.5">
             {notDownloadedModels.map((model) => {
               const progress = downloadProgress.get(model.id)
               const isDownloading = model.is_downloading || !!progress
 
               return (
-                <div key={model.id} className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="text-sm text-white">{model.name}</div>
-                      <div className="text-xs text-slate-400">
-                        {model.size_mb} MB • {model.languages.join(", ")}
+                <div
+                  key={model.id}
+                  className="rounded-md border border-slate-700/40 bg-slate-900/30 px-2 py-1.5 space-y-1.5"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-slate-200 truncate">{model.name}</span>
+                        <span className="text-[10px] font-mono text-slate-500 shrink-0">{model.size_mb} MB</span>
                       </div>
+                      <div className="text-[10px] text-slate-500 mt-0.5">{model.languages.join(", ")}</div>
                     </div>
                     <Button
                       size="sm"
                       onClick={() => handleDownload(model.id)}
                       disabled={isDownloading}
-                      className="h-7 px-2 text-xs gap-1"
+                      className="h-6 px-2 text-[10px] gap-1 shrink-0 bg-slate-800 border border-slate-600 hover:bg-cyan-900/40 hover:border-cyan-600 text-slate-300 hover:text-cyan-300 disabled:opacity-60"
                     >
                       {isDownloading ? (
                         <>
-                          <Loader2 className="h-3 w-3 animate-spin" />
+                          <Loader2 className="h-2.5 w-2.5 animate-spin" />
                           Downloading
                         </>
                       ) : (
                         <>
-                          <Download className="h-3 w-3" />
-                          Download
+                          <Download className="h-2.5 w-2.5" />
                         </>
                       )}
                     </Button>
                   </div>
+
                   {progress && (
                     <div className="space-y-1">
-                      <Progress value={progress.percentage} className="h-1" />
-                      <p className="text-xs text-slate-400 text-right">
-                        {(progress.downloaded / 1024 / 1024).toFixed(1)} / {(progress.total / 1024 / 1024).toFixed(1)}{" "}
-                        MB ({progress.percentage.toFixed(0)}%)
-                      </p>
+                      <div className="w-full h-0.5 bg-slate-800 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-cyan-500 rounded-full transition-all duration-300"
+                          style={{ width: `${progress.percentage}%` }}
+                        />
+                      </div>
+                      <div className="flex justify-between text-[10px] font-mono text-slate-500">
+                        <span>{(progress.downloaded / 1024 / 1024).toFixed(1)} MB</span>
+                        <span className="text-cyan-500">{progress.percentage.toFixed(0)}%</span>
+                        <span>{(progress.total / 1024 / 1024).toFixed(1)} MB</span>
+                      </div>
                     </div>
                   )}
                 </div>
               )
             })}
-          </div>
-        </div>
-      )}
-
-      {downloadedModels.length > 0 && (
-        <div className="grid grid-cols-[120px_1fr] items-start gap-3">
-          <Label className="text-sm text-slate-300 pt-1">Manage</Label>
-          <div className="space-y-1">
-            {downloadedModels.map((model) => (
-              <div key={model.id} className="flex items-center justify-between text-sm">
-                <span className="text-slate-300">{model.name}</span>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleDelete(model.id)}
-                  className="h-7 px-2 text-xs text-red-400 hover:text-red-300 hover:bg-red-950/30"
-                >
-                  <Trash2 className="h-3 w-3" />
-                </Button>
-              </div>
-            ))}
           </div>
         </div>
       )}

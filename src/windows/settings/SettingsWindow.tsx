@@ -1,5 +1,6 @@
 import { invoke } from "@tauri-apps/api/core"
 import { getCurrentWindow } from "@tauri-apps/api/window"
+import { Volume2 } from "lucide-react"
 import { useEffect, useState } from "react"
 
 import { Button } from "@/components/ui/button"
@@ -10,9 +11,8 @@ import { useVoiceStore } from "@/store/voiceStore"
 
 export function SettingsWindow() {
   const [availableSoundPacks, setAvailableSoundPacks] = useState<string[]>([])
-  const [isCapturingKey, setIsCapturingKey] = useState(false)
 
-  const { soundPack, setPttShortcut, setSoundPack } = useVoiceStore()
+  const { soundPack, setSoundPack } = useVoiceStore()
 
   useEffect(() => {
     const fetchSoundPacks = async () => {
@@ -42,110 +42,13 @@ export function SettingsWindow() {
     getCurrentWindow().close()
   }
 
-  const [capturedKeys, setCapturedKeys] = useState<string[]>([])
-
-  useEffect(() => {
-    if (!isCapturingKey) return
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      e.preventDefault()
-      e.stopPropagation()
-
-      if (e.key === "Escape") {
-        setCapturedKeys([])
-        setIsCapturingKey(false)
-        return
-      }
-
-      const keys: string[] = []
-
-      if (e.ctrlKey || e.metaKey) keys.push("CmdOrCtrl")
-      if (e.altKey) keys.push("Alt")
-      if (e.shiftKey) keys.push("Shift")
-
-      if (!["Control", "Meta", "Alt", "Shift"].includes(e.key)) {
-        let mainKey = e.key
-
-        if (e.key === " ") mainKey = "Space"
-        else if (e.key.startsWith("Arrow")) mainKey = e.key.replace("Arrow", "")
-        else if (e.key.length === 1) mainKey = e.key.toUpperCase()
-
-        keys.push(mainKey)
-      }
-
-      if (keys.length > 0) {
-        setCapturedKeys(keys)
-      }
-    }
-
-    const handleKeyUp = () => {
-      if (capturedKeys.length > 0) {
-        setPttShortcut(capturedKeys.join("+"))
-        setCapturedKeys([])
-        setIsCapturingKey(false)
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown, true)
-    window.addEventListener("keyup", handleKeyUp, true)
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown, true)
-      window.removeEventListener("keyup", handleKeyUp, true)
-    }
-  }, [isCapturingKey, capturedKeys, setPttShortcut])
-
   return (
     <div className="min-h-screen bg-black text-white p-4">
       <div className="space-y-4">
-        {/* Voice Commands Section */}
-        <div className="space-y-4">
-          {/* Voice Mode Selection */}
-          {/* <div className="grid grid-cols-[120px_1fr] items-center gap-3">
-            <Label className="text-slate-300">Mic Mode</Label>
-
-            <select
-              id="micMode"
-              name="micMode"
-              disabled={voiceEnabled}
-              value={voiceMode}
-              onChange={(e) => setVoiceMode(e.target.value as "continuous" | "ptt")}
-              className="w-full h-9 bg-slate-900/50 border border-slate-600 text-white text-sm rounded-md px-3 focus:outline-none focus:ring-2 focus:ring-cyan-500"
-            >
-              <option value="continuous">Open Mic</option>
-              <option value="ptt">Push-to-Talk</option>
-            </select>
-          </div> */}
-
-          {/* PTT Shortcut Display/Edit */}
-          {/* <div className="grid grid-cols-[120px_1fr] items-center gap-2">
-            <Label className="text-slate-300">PTT Shortcut</Label>
-
-            <div className="flex items-center gap-2">
-              <Button
-                disabled={voiceMode !== "ptt"}
-                onClick={() => {
-                  setCapturedKeys([])
-                  setIsCapturingKey(true)
-                }}
-                className={`
-                  flex-1 px-3 py-2 rounded-md font-mono text-sm
-                  transition border
-                  ${
-                    isCapturingKey
-                      ? "bg-cyan-700/20 border-cyan-400 text-cyan-300 animate-pulse"
-                      : "bg-slate-900/50 border-slate-600 text-cyan-400 hover:bg-slate-700"
-                  }
-                `}
-              >
-                {isCapturingKey
-                  ? capturedKeys.length > 0
-                    ? capturedKeys.join(" + ").replace("CmdOrCtrl", "Ctrl")
-                    : "Press shortcut (ESC)"
-                  : pttShortcut.replace("CmdOrCtrl", "Ctrl")}
-              </Button>
-            </div>
-          </div> */}
+        <div className="flex items-center gap-2 pt-1">
+          <Volume2 className="h-3 w-3 text-cyan-400 shrink-0" />
+          <span className="text-[10px] font-mono text-cyan-400 uppercase tracking-widest">Audio</span>
+          <div className="flex-1 h-px bg-slate-700/60" />
         </div>
 
         <div className="grid grid-cols-[120px_1fr] items-center gap-3">

@@ -257,6 +257,10 @@ class Program
             "config 1 plus f" => "config one plus f",
             "config two" => "config two",
             "config to" => "config two",
+            "can fix one plus f" => "config one plus f",
+            "con fig one plus f" => "config one plus f",
+            "can fix two" => "config two",
+            "con fig two" => "config two",
             _ => text,
         };
 
@@ -439,6 +443,10 @@ class Program
             "config one plus eff",
             "config 1 plus f",
             "con fig one plus eff",
+            "can fix one plus f2",
+            "con fig one plus f",
+            "can fix two",
+            "con fig two",
             "config two",
             "config to",
             "config two",
@@ -482,5 +490,6 @@ class Program
             "starting two",
             "starting engine two",
             "starting engine number two",
+            "config",
         };
 }

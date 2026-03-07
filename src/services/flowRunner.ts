@@ -125,6 +125,13 @@ export async function executeFlow(flowId: string): Promise<void> {
         await abortableSleep(step.wait_ms, signal)
       }
 
+      if (step.sound_on_execute) {
+        await waitForSoundFinished()
+        await playSound(step.sound_on_execute)
+        await waitForSoundFinished()
+        checkAbort(signal)
+      }
+
       if (step.skip_verify) {
         setStepStatus(i, "done")
       } else {

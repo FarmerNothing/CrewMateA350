@@ -3,6 +3,7 @@ import { executeFlow } from "@/services/flowRunner"
 import { playSound } from "@/services/playSounds"
 import { usePreflightTimerStore } from "@/store/preflightTimerStore"
 
+import { setStartAPU } from "./commands/apu"
 import { setAutoPilot } from "./commands/autoPilot"
 import { setEngAntiIce } from "./commands/eng_anti_ice"
 import { setFlaps } from "./commands/flaps"
@@ -10,7 +11,6 @@ import { flightControlsCheck } from "./commands/flight_controls_check"
 import { setFlightDirector } from "./commands/flight_director"
 import { setGearHandle } from "./commands/gear"
 import { setLandingLights } from "./commands/landing_lights"
-import { setStartAPU } from "./commands/apu"
 import { setStrobeLights } from "./commands/strobe_lights"
 import { setTaxiLights } from "./commands/taxi_lights"
 import { setWingAntiIce } from "./commands/wing_anti_ice"
@@ -71,7 +71,7 @@ export function createVoiceCommands(): VoiceCommand[] {
       },
       description: "Start the APU"
     },
-    
+
     // anti ice commands
     {
       phrases: ["Engine anti ice on", "Engine anti-ice on", "Engine anti ice please", "Engine anti-ice please"],

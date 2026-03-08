@@ -7,6 +7,7 @@
 [![Discord](https://img.shields.io/badge/discord-CrewMate-5865F2?logo=discord&logoColor=white)](https://discord.gg/aBZZWG2Y6F)
 
 [![License](https://img.shields.io/badge/license-GPL%203.0-blue.svg)](LICENSE)
+
 ![CrewMate Logo](./src-tauri/icons/icon.png)
 
 > **CrewMate A350** is a free and open-source alternative to Copilot-style apps for aircraft workflows.

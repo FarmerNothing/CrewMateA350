@@ -127,6 +127,7 @@ $phrases = @{
     "are_you_sure"                              = "Are you sure?"
     "packs_1_and_2_on"                          = "Packs one and two on"
     "cabin_ready"                               = "Cabin is ready"
+    "thrust_set"                                = "Thrust set"
 }
 
 # Derive folder name from voice: "en-US-JennyNeural" -> "Jenny"

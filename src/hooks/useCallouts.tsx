@@ -8,6 +8,7 @@ import type { Telemetry } from "@/store/telemetryStore"
 type LandingPhase = "idle" | "spoilers" | "reverser" | "decel"
 
 interface SpeedCalloutFlags {
+  calledThrustSet: boolean
   called100: boolean
   called70: boolean
   calledVr: boolean
@@ -34,6 +35,17 @@ interface PreviousValues {
   alt: number
   onGround: number
   cabinIsReady: number
+  takeoffN1: number
+}
+
+const THRUST_SET_MARGIN = 1
+
+const getTakeoffThrustTarget = (t: Telemetry) => {
+  if ((t.iniFlexTemperature ?? 0) > 1) {
+    return t.iniThrustFlexN1 ?? 0
+  }
+
+  return t.iniThrustTogaN1 ?? 0
 }
 
 const crossedUp = (prev: number, curr: number, threshold: number) => prev < threshold && curr >= threshold
@@ -104,6 +116,7 @@ const phaseHandlers: Record<
 
 export function useCallouts(vrSpeed: number) {
   const speed = useRef<SpeedCalloutFlags>({
+    calledThrustSet: false,
     called100: false,
     called70: false,
     calledVr: false,
@@ -129,10 +142,12 @@ export function useCallouts(vrSpeed: number) {
     speed: 0,
     alt: 0,
     onGround: 1,
-    cabinIsReady: 0
+    cabinIsReady: 0,
+    takeoffN1: 0
   })
 
   const cabinReadyPrimed = useRef(false)
+  const thrustSetPrimed = useRef(false)
 
   const vrSpeedRef = useRef(vrSpeed)
   vrSpeedRef.current = vrSpeed
@@ -159,10 +174,17 @@ export function useCallouts(vrSpeed: number) {
     const vr = vrSpeedRef.current
     const now = Date.now()
     const cabinIsReady = (t.cabinIsReady ?? 0) > 0.5 ? 1 : 0
+    const takeoffN1 = Math.min(t.engineN1_1 ?? 0, t.engineN1_2 ?? 0)
+    const takeoffThrustTarget = getTakeoffThrustTarget(t)
 
     if (!cabinReadyPrimed.current) {
       cabinReadyPrimed.current = true
       p.cabinIsReady = cabinIsReady
+    }
+
+    if (!thrustSetPrimed.current) {
+      thrustSetPrimed.current = true
+      p.takeoffN1 = takeoffN1
     }
 
     // Takeoff / landing edge detection
@@ -188,16 +210,32 @@ export function useCallouts(vrSpeed: number) {
       sp.vrInhibit = true
     }
 
+    // 100 knots callout
     if (t.onGround && crossedUp(p.speed, t.ias, 100) && !sp.called100) {
       playSound("100_knots.ogg")
       sp.called100 = true
     }
 
+    // 70 knots callout
     if (t.onGround && crossedDown(p.speed, t.ias, 70) && !sp.called70) {
       playSound("70_knots.ogg")
       sp.called70 = true
     }
 
+    // Thrust set callout
+    if (
+      t.onGround &&
+      t.ias < 80 &&
+      takeoffThrustTarget > 0 &&
+      p.takeoffN1 < takeoffThrustTarget - THRUST_SET_MARGIN &&
+      takeoffN1 >= takeoffThrustTarget - THRUST_SET_MARGIN &&
+      !sp.calledThrustSet
+    ) {
+      playSound("thrust_set.ogg")
+      sp.calledThrustSet = true
+    }
+
+    // Cabin ready
     if (t.onGround && p.cabinIsReady === 0 && cabinIsReady === 1) {
       playSound("cabin_ready.ogg")
     }
@@ -244,6 +282,7 @@ export function useCallouts(vrSpeed: number) {
 
     // Re-arm at taxi speed
     if (t.onGround && t.ias < 30) {
+      sp.calledThrustSet = false
       sp.calledVr = false
       sp.called100 = false
       sp.vrInhibit = false
@@ -296,6 +335,7 @@ export function useCallouts(vrSpeed: number) {
     p.alt = t.alt
     p.onGround = t.onGround
     p.cabinIsReady = cabinIsReady
+    p.takeoffN1 = takeoffN1
   }, [])
 
   useEffect(() => {

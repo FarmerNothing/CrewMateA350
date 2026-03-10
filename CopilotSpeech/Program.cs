@@ -380,7 +380,7 @@ class Program
     static IEnumerable<string> GetCompoundDigitPhrases()
     {
         var seqs4 = GetDigitSequenceList(maxDigits: 4);
-        var seqs2 = GetDigitSequenceList(maxDigits: 2);
+        var seqs3 = GetDigitSequenceList(maxDigits: 3);
 
         // "[digits] set"  e.g. "one zero two three set"
         // "[digits] tons" e.g. "nine tons"
@@ -389,9 +389,9 @@ class Program
         foreach (var suffix in suffixes)
             yield return $"{seq} {suffix}";
 
-        // "[digits] point [digits] tons"  e.g. "nine point five tons"
-        foreach (var intSeq in seqs2)
-        foreach (var decSeq in seqs2)
+        // "[digits] point [digits] tons"  e.g. "nine point five tons", "one zero zero point two tons"
+        foreach (var intSeq in seqs3)
+        foreach (var decSeq in seqs3)
             yield return $"{intSeq} point {decSeq} tons";
 
         // Prefix patterns: "set altitude [digits]", "set heading [digits]", etc.

@@ -9,7 +9,7 @@
     },
     {
       "challenge": "fuel_quantity.ogg",
-      "response": ["set and checked"],
+      "response": ["tons", "set and checked"],
       "label": "Fuel Quantity"
     },
     {

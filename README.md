@@ -68,7 +68,7 @@
 
 ## Reporting Bugs & Requesting Features
 
-If you encounter a problem or want to request a new feature, please [open an issue](https://github.com/your-org/your-repo/issues).
+If you encounter a problem or want to request a new feature, please [open an issue](https://github.com/marxio09dio/CrewMateA350/issues).
 
 ---
 

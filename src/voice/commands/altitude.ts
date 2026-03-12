@@ -11,18 +11,18 @@ export async function setAltitudeDial(feet: number) {
   }
 }
 export async function setSelAlt(position: number) {
-    try {
-      const expression = `${position} (>L:INI_FCU_ALTITUDE_PULL_COMMAND)`
-      await simvarSet(expression)
-    } catch (error) {
-      console.error("Error selecting manual altitude:" ,error)
-    }
+  try {
+    const expression = `${position} (>L:INI_FCU_ALTITUDE_PULL_COMMAND)`
+    await simvarSet(expression)
+  } catch (error) {
+    console.error("Error selecting manual altitude:", error)
   }
+}
 export async function setManagedAlt(position: number) {
-    try {
-      const expression = `${position} (>L:INI_FCU_ALTITUDE_PUSH_COMMAND)`
-      await simvarSet(expression)
-    } catch (error) {
-      console.error("Error selecting managed altitude:" ,error)
-    }
+  try {
+    const expression = `${position} (>L:INI_FCU_ALTITUDE_PUSH_COMMAND)`
+    await simvarSet(expression)
+  } catch (error) {
+    console.error("Error selecting managed altitude:", error)
+  }
 }

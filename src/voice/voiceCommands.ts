@@ -4,6 +4,8 @@ import { playSound } from "@/services/playSounds"
 import { usePreflightTimerStore } from "@/store/preflightTimerStore"
 
 import { setAltitudeDial } from "./commands/altitude"
+import { setSelAlt } from "./commands/altitude"
+import { setManagedAlt } from "./commands/altitude"
 import { setStartAPU } from "./commands/apu"
 import { setAutoPilot } from "./commands/autoPilot"
 import { setEngAntiIce } from "./commands/eng_anti_ice"
@@ -13,14 +15,12 @@ import { setFlightDirector } from "./commands/flight_director"
 import { setGearHandle } from "./commands/gear"
 import { executeGoAround } from "./commands/goAround"
 import { setHeadingDial } from "./commands/heading"
-import { setLandingLights } from "./commands/landing_lights"
-import { setSeatBelts } from "./commands/seat_belts"
 import { setSelHeading } from "./commands/heading"
 import { setManagedHeading } from "./commands/heading"
+import { setLandingLights } from "./commands/landing_lights"
+import { setSeatBelts } from "./commands/seat_belts"
 import { setAirspeedDial } from "./commands/speed"
 import { setSelSpeed } from "./commands/speed"
-import { setSelAlt } from "./commands/altitude"
-import { setManagedAlt } from "./commands/altitude"
 import { setManagedSpeed } from "./commands/speed"
 import { setStrobeLights } from "./commands/strobe_lights"
 import { setTaxiLights } from "./commands/taxi_lights"
@@ -314,7 +314,7 @@ export function createVoiceCommands(): VoiceCommand[] {
       },
       description: "Pulls speed knob to selected mode"
     },
-        {
+    {
       phrases: ["manage speed"],
       action: () => {
         playSound("check.ogg")
@@ -338,7 +338,7 @@ export function createVoiceCommands(): VoiceCommand[] {
       },
       description: "Pushes heading knob to managed mode"
     },
-      {
+    {
       phrases: ["pull altitude", "pull flight level"],
       action: () => {
         playSound("check.ogg")

@@ -49,13 +49,16 @@ export const numericPrefixCommands: Record<string, (value: number) => void | Pro
   "flight level select ": (v) => setAltitudeDial(v * 100),
   "set speed ": (v) => setAirspeedDial(v),
   "speed select ": (v) => setAirspeedDial(v),
-  "pull heading ": (v) => {
+  "pull heading ": async (v) => {
     setSelHeading(1)
-    setSelHeading(v)
+    await new Promise((r) => setTimeout(r, 500))
+    setHeadingDial(v)
   },
-  "pull speed ": (v) => {
+
+  "pull speed ": async (v) => {
     setSelSpeed(1)
-    setSelSpeed(v)
+    await new Promise((r) => setTimeout(r, 500))
+    setAirspeedDial(v)
   }
 }
 
@@ -319,6 +322,7 @@ export function createVoiceCommands(): VoiceCommand[] {
     },
     {
       phrases: ["pull speed"],
+      exactMatch: true,
       action: () => {
         playSound("check.ogg")
         setSelSpeed(1)
@@ -327,6 +331,7 @@ export function createVoiceCommands(): VoiceCommand[] {
     },
     {
       phrases: ["manage speed"],
+      exactMatch: true,
       action: () => {
         playSound("check.ogg")
         setManagedSpeed(1)
@@ -335,6 +340,7 @@ export function createVoiceCommands(): VoiceCommand[] {
     },
     {
       phrases: ["pull heading"],
+      exactMatch: true,
       action: () => {
         playSound("check.ogg")
         setSelHeading(1)

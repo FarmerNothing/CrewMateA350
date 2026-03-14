@@ -16,11 +16,11 @@ import { useSimConnection } from "@/hooks/useSimConnection"
 import { useSpeechCommands } from "@/hooks/useSpeechCommands"
 import { useVoskModelStatus } from "@/hooks/useVoskModelStatus"
 import { usePerformanceStore } from "@/store/performanceStore"
+import { usePreflightTimerStore } from "@/store/preflightTimerStore"
 import { useTelemetryStore } from "@/store/telemetryStore"
 import { useVoiceStore } from "@/store/voiceStore"
 
 import "./App.css"
-import { usePreflightTimerStore } from "./store/preflightTimerStore"
 
 function App() {
   useSimConnection()
@@ -52,7 +52,7 @@ function App() {
     <div className="flex  bg-black flex-col min-h-screen">
       <main className="flex-1  text-white p-2">
         <div className="max-w-6xl mx-auto">
-          {connected ? (
+          {!connected ? (
             <div className="flex flex-col items-center justify-center mb-6 py-5">
               <div className="relative flex items-center justify-center mb-4">
                 <div className="w-10 h-10 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>

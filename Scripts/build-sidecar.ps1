@@ -56,14 +56,14 @@ else {
 
 # Copy Silero VAD model
 Write-Host "Copying Silero VAD model..." -ForegroundColor Yellow
-$vadModelPath = "silero_vad_v4.onnx"
+$vadModelPath = "silero_vad.onnx"
 
 if (Test-Path $vadModelPath) {
-    Copy-Item $vadModelPath "$binDir\silero_vad_v4.onnx" -Force
-    Write-Host "✓ Copied silero_vad_v4.onnx" -ForegroundColor Green
+    Copy-Item $vadModelPath "$binDir\silero_vad.onnx" -Force
+    Write-Host "✓ Copied silero_vad.onnx" -ForegroundColor Green
 }
 else {
-    Write-Host "✗ Warning: silero_vad_v4.onnx not found at $vadModelPath" -ForegroundColor Yellow
+    Write-Host "✗ Warning: silero_vad.onnx not found at $vadModelPath" -ForegroundColor Yellow
 }
 
 Write-Host "`nSidecar build complete!" -ForegroundColor Green

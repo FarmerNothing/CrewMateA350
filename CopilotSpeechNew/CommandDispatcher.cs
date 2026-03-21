@@ -347,8 +347,6 @@ namespace VoiceSidecar
             [105] = "manage_speed",
             [106] = "pull_heading",
             [107] = "manage_nav",
-            [108] = "pull_altitude",
-            [109] = "manage_altitude",
             [110] = "push_to_level_off",
             [111] = "arm_approach",
             [112] = "arm_localizer",
@@ -418,8 +416,6 @@ namespace VoiceSidecar
             [61] = "brake_check",
             // Altimeter
             [64] = "set_standard",
-            // Transponder
-            [66] = "transponder_auto",
             // Generic checklist responses
             [70] = "confirm",
             [71] = "negative",

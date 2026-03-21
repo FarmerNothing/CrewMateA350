@@ -34,7 +34,6 @@ namespace VoiceSidecar
                 3 => AltitudeFeet(cval, raw),
                 4 => Speed(cval, raw),
                 5 => Frequency(cval, raw),
-                6 => Transponder(cval, raw),
                 7 => Altimeter(cval, raw),
                 8 => Fuel(cval, "kg", balanced: false, raw),
                 9 => Fuel(cval, "kg", balanced: true, raw),
@@ -104,15 +103,6 @@ namespace VoiceSidecar
                 System.Globalization.CultureInfo.InvariantCulture
             );
             return Cmd("frequency", raw, new() { ["value"] = freq });
-        }
-
-        private static VoiceCommand? Transponder(string cval, string raw)
-        {
-            if (cval.Length != 4 || !int.TryParse(cval, out _))
-                return null;
-            if (cval.Any((c) => c == '8' || c == '9'))
-                return null;
-            return Cmd("transponder", raw, new() { ["code"] = cval });
         }
 
         private static VoiceCommand? Altimeter(string cval, string raw)

@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.1.9] - 2026-03-21
+
+- Replaced VOSK with Windows Speach Engine - @marxio09dio
+- Added a custom Speach Trainer - @marxio09dio
+- Improved various checklists responses - @marxio09dio
+- Added option to change audio output device - @marxio09dio
+- Critical Voice Command Fixes - @alexlenh
+- Fixed voice various commands terminology - @alexlenh
+- Improved manual documentation - @alexlenh @marxio09dio
+
 ## [0.1.8] - 2026-03-17
 
 - Voice Command Updates to FCOM and Manual Standards - @marxio09dio, @alexlenh

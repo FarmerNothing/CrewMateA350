@@ -436,6 +436,7 @@ namespace VoiceSidecar
             [96] = "config_1f",
             [97] = "config_2",
             [98] = "config_3",
+            [10] = "rwy_cond",
             // Go around / abort
             [99] = "go_around_flaps",
             [100] = "abort_takeoff",

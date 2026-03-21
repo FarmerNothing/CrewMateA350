@@ -52,7 +52,7 @@ This tutorial assumes you are parked at the gate with engines off. You are the C
 - 58 min: PM takes their seat.
 - 55 min: PM starts preliminary cockpit preparation.
 - 45 min: PM departs for external walkaround. PF starts cockpit preparation.
-![Cockpit Preparation flow pattern](Images/COCKPIT%20PREPARATION%20FLOW%20PATTERN.png)
+  ![Cockpit Preparation flow pattern](Images/COCKPIT%20PREPARATION%20FLOW%20PATTERN.png)
 - 33 min: PM returns and starts cockpit preparation on his side.
 - 25 min: PF conducts the departure briefing (enter takeoff data in the Takeoff Performance window).
 - 20 min: PF calls for the COCKPIT PREPARATION checklist.
@@ -104,7 +104,7 @@ This tutorial assumes you are parked at the gate with engines off. You are the C
 
 ### 10k Descent
 
-![10k descent flow pattern](Images/AT%2010K%20Descen.png)
+![10k descent flow pattern](Images/AT%2010%20000%20FT%20AAL%20DES%20FLOW%20PATTERN.png)
 
 ### Approach
 

@@ -611,6 +611,14 @@
       <item>config one plus f<tag>out.pid="96";</tag></item>
       <item>config two<tag>out.pid="97";</tag></item>
       <item>config three<tag>out.pid="98";</tag></item>
+      <item>dry<tag>out.pid="10"</tag></item>
+      <item>wet<tag>out.pid="10"</tag></item>
+      <item>compacted snow<tag>out.pid="10"</tag></item>
+      <item>snow<tag>out.pid="10"</tag></item>
+      <item>slippery<tag>out.pid="10"</tag></item>
+      <item>standing water<tag>out.pid="10"</tag></item>
+      <item>slush<tag>out.pid="10"</tag></item>
+      <item>ice<tag>out.pid="10"</tag></item>
       <!-- Go around / abort / land -->
       <item>go around flaps<tag>out.pid="99";</tag></item>
       <item>abort takeoff<tag>out.pid="100";</tag></item>

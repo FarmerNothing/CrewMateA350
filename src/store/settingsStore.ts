@@ -12,20 +12,24 @@ interface SettingsStore {
   voiceMode: "continuous" | "ptt"
   pttShortcut: string
   soundPack: string
+  geSoundPack: string
   soundVolume: number
   outputDevice?: string | null
   inputDevice?: string | null
   lightsControlMode: LightsControlMode
   confidenceThreshold: number
+  postLandingShutdownEnabled: boolean
   setVoiceEnabled: (enabled: boolean) => void
   setVoiceMode: (mode: "continuous" | "ptt") => void
   setPttShortcut: (shortcut: string) => void
   setSoundPack: (pack: string) => void
+  setGeSoundPack: (pack: string) => void
   setSoundVolume: (volume: number) => void
   setOutputDevice: (device: string | null) => void
   setInputDevice: (device: string | null) => void
   setLightsControlMode: (mode: LightsControlMode) => void
   setConfidenceThreshold: (threshold: number) => void
+  setPostLandingShutdownEnabled: (enabled: boolean) => void
 }
 
 let isUpdatingFromEvent = false
@@ -44,11 +48,13 @@ export const useSettingsStore = create<SettingsStore>()(
       voiceMode: "continuous",
       pttShortcut: "CmdOrCtrl+Shift+Space",
       soundPack: "Jenny",
+      geSoundPack: "GE_Davis",
       soundVolume: 100,
       outputDevice: null,
       inputDevice: null,
       lightsControlMode: defaultLightsControlMode,
       confidenceThreshold: 85,
+      postLandingShutdownEnabled: true,
 
       setVoiceEnabled: (enabled) => {
         set({ voiceEnabled: enabled })
@@ -72,6 +78,12 @@ export const useSettingsStore = create<SettingsStore>()(
         set({ soundPack: pack })
         if (!isUpdatingFromEvent) {
           emit("settings-changed", { soundPack: pack })
+        }
+      },
+      setGeSoundPack: (pack) => {
+        set({ geSoundPack: pack })
+        if (!isUpdatingFromEvent) {
+          emit("settings-changed", { geSoundPack: pack })
         }
       },
       setSoundVolume: (volume) => {
@@ -106,6 +118,12 @@ export const useSettingsStore = create<SettingsStore>()(
         })
         if (!isUpdatingFromEvent) {
           emit("settings-changed", { confidenceThreshold: safeThreshold })
+        }
+      },
+      setPostLandingShutdownEnabled: (enabled) => {
+        set({ postLandingShutdownEnabled: enabled })
+        if (!isUpdatingFromEvent) {
+          emit("settings-changed", { postLandingShutdownEnabled: enabled })
         }
       }
     }),
@@ -143,6 +161,7 @@ listen<
       | "setSoundVolume"
       | "setLightsControlMode"
       | "setConfidenceThreshold"
+      | "setPostLandingShutdownEnabled"
     >
   >
 >("settings-changed", (event) => {
@@ -160,6 +179,9 @@ listen<
   if (event.payload.soundPack !== undefined) {
     useSettingsStore.setState({ soundPack: event.payload.soundPack })
   }
+  if (event.payload.geSoundPack !== undefined) {
+    useSettingsStore.setState({ geSoundPack: event.payload.geSoundPack })
+  }
   if (event.payload.soundVolume !== undefined) {
     useSettingsStore.setState({ soundVolume: event.payload.soundVolume })
   }
@@ -168,6 +190,9 @@ listen<
   }
   if (event.payload.confidenceThreshold !== undefined) {
     useSettingsStore.setState({ confidenceThreshold: event.payload.confidenceThreshold })
+  }
+  if (event.payload.postLandingShutdownEnabled !== undefined) {
+    useSettingsStore.setState({ postLandingShutdownEnabled: event.payload.postLandingShutdownEnabled })
   }
   if (event.payload.outputDevice !== undefined) {
     useSettingsStore.setState({ outputDevice: event.payload.outputDevice })

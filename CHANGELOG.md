@@ -1,5 +1,33 @@
 # Changelog
 
+## [0.x.x] - 2026-xx-xx
+
+- Added a passing altitude callout when setting standard – @marxio09dio
+- Implemented single-engine taxi flows, including Engine 1/2 shutdown commands and Engine 2 start command – @alexlenh
+- Introduced random delays between flow steps for more realism – @alexlenh
+- Chocks are now automatically removed during the before-start flow and automatically placed during the shutdown flow – @marxio09dio
+- Added a Ground Engineer role to handle GPU/ASU/ACU connections and disconnections – @marxio09dio
+- Commands now support optional “please” as a prefix or suffix (e.g., “please disconnect GPU”, “flaps 0 please”) – @marxio09dio
+- Added commands to arm and disarm slides – @marxio09dio
+- Added an optional 5-minute delay before engine shutdown – @marxio09dio
+- Minor tweaks to voice hint logic – @marxio09dio
+- Crewmate now opens the checklist (C/L) menu on the right-side MCDU (actions must still be completed manually due to lack of LVAR support for checklist items) – @marxio09dio
+
+## [0.2.0] - 2026-03-27
+
+- Removed unused grammar - @alexlenh @marxio09dio
+- Added runway conditions grammar - @alexlenh
+- Various manual corrections - @alexlenh
+- Fixed "Voice Trainer" not being bundled - @marxio09dio
+- Added visual feedback for speech-related errors (i.e. language pack not installed) - @marxio09dio
+- Improved speech engine error handling - @marxio09dio
+- Changed (packs off T.O. logic, it will be turned on when CLB thrust is set as per FCOM) - @alexlenh
+- Added option to choose microphone device - @marxio09dio
+- Improved various error handling throughout the app - @marxio09dio
+- Adjusted various flows - @alexlenh
+- Added helper panel (hints what to say) - @marxio09dio
+- Fixed issue with spoilers check on landing checklist - @marxio09dio
+
 ## [0.1.9] - 2026-03-21
 
 - Replaced VOSK with Windows Speach Engine - @marxio09dio
@@ -74,20 +102,20 @@
 
 ## [0.1.5] - 2026-03-08
 
-- Added start APU" voice commands
-- Added "speed checked" callout when lowering the gear
-- Added "go around flaps" command and go around flows
-- Added open and close all curtains
-- Added option to hold or skip on wrong checklists items
-- Added "slides" checklist item on before start will now check if the slides are all armed
-- Fixed improved connection to sim logic
-- Fixed vars reads on checklists
+- Added start APU" voice commands - @marxio09dio
+- Added "speed checked" callout when lowering the gear - @marxio09dio
+- Added "go around flaps" command and go around flows - @marxio09dio
+- Added open and close all curtains - @marxio09dio
+- Added option to hold or skip on wrong checklists items - @marxio09dio
+- Added "slides" checklist item on before start will now check if the slides are all armed - @marxio09dio
+- Fixed improved connection to sim logic - @marxio09dio
+- Fixed vars reads on checklists - @marxio09dio
 
 ## [0.1.4] - 2026-03-06
 
-- Added Appdata shortcut
-- Fixed simconnection status logic
+- Added Appdata shortcut - @marxio09dio
+- Fixed simconnection status logic - @marxio09dio
 
 ## [0.1.3] - 2026-03-03
 
-- Initial public realease
+- Initial public realease - @marxio09dio
